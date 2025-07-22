@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marka Studio Admin Panel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #eee;
+      border-radius: 6px 6px 0 0;
+      margin-right: 5px;
+    }
+    .tab.active {
+      background: #1a73e8;
+      color: white;
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+    }
+    select, input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #1a73e8;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #135ecf;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Marka Studio Admin Panel</h2>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('general')">General Info</div>
+    <div class="tab" onclick="switchTab('financial')">Financials</div>
+    <div class="tab" onclick="switchTab('notes')">Notes</div>
+  </div>
+
+ <form id="updateForm">
+
+  <!-- Tab 1 -->
+  <div class="tab-content active" id="general">
+
+    <label for="client">Client/Brand</label>
+    <select id="client" onchange="loadTaskList()">
+      <option value="">-- Select Client --</option>
+      <option>BeHappy</option>
+      <option>Happy Impact</option>
+      <option>Solve-IT</option>
+      <option>Tikifish Farms</option>
+      <option>Chiwinkx Farms</option>
+      <option>Bota</option>
+      <option>BigMouse Studio</option>
+      <option>Other Clients</option>
+    </select>
+
+    <label for="task">Task</label>
+    <select id="task">
+      <option value="">-- Select Task --</option>
+    </select>
+    <button type="button" onclick="loadTask()">🔍 Load Task</button>
+
+    <label for="category">Category</label>
+    <select id="category">
+      <option>Design</option>
+      <option>Content Strategy</option>
+      <option>Animations</option>
+      <option>Video Editing</option>
+      <option>Branding</option>
+      <option>Design & Print</option>
+    </select>
+
+    <label for="status">Status</label>
+    <select id="status">
+      <option>⏳ In Progress</option>
+      <option>✅ Completed</option>
+      <option>📤 Sent for Review</option>
+      <option>📥 Received</option>
+      <option>🔄 Waiting for Feedback</option>
+      <option>🟡 On Hold</option>
+      <option>❌ Cancelled</option>
+    </select>
+
+    <label for="priority">Priority</label>
+    <select id="priority">
+      <option>High</option>
+      <option>Medium</option>
+      <option>Low</option>
+    </select>
+
+    <label for="due">Due Date</label>
+    <input type="date" id="due">
+  </div>
+
+  <!-- Tab 2 -->
+  <div class="tab-content" id="financial">
+    <label for="payment">Payment Status</label>
+    <select id="payment">
+      <option>Paid</option>
+      <option>Unpaid</option>
+      <option>Partially Paid</option>
+    </select>
+
+    <label for="cost">Project Cost</label>
+    <input type="number" id="cost">
+
+    <label for="paid">Amount Paid</label>
+    <input type="number" id="paid">
+  </div>
+
+  <!-- Tab 3 -->
+  <div class="tab-content" id="notes">
+    <label for="note">Note / Link</label>
+    <textarea id="note" rows="3" placeholder="Paste note or link here..."></textarea>
+
+    <label for="clientnote">Client Notes</label>
+    <textarea id="clientnote" rows="3" placeholder="Visible only to studio..."></textarea>
+
+    <label for="deliverables">Deliverables</label>
+    <textarea id="deliverables" rows="3" placeholder="e.g. 2 Teasers, 1 Explainer..."></textarea>
+  </div>
+
+  <button type="submit">Update Task</button>
+</form>
+
+</div>
+
+<script>
+  let WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzb8-YY3qlW284uaqOG7Jat9RwqdsS-gWE1NtrE9HyXh7tnnV-skxrDX03IBTLDXDt5Rg/exec ";
+
+  // Load all clients on page load
+  window.onload = function () {
+    fetch(`${WEB_APP_URL}?action=listClients`)
+      .then(res => res.json())
+      .then(data => {
+        const clientSelect = document.getElementById("client");
+        data.clients.forEach(client => {
+          const opt = document.createElement("option");
+          opt.value = client;
+          opt.textContent = client;
+          clientSelect.appendChild(opt);
+        });
+      })
+      .catch(err => {
+        alert("Failed to load clients. Check connection.");
+        console.error(err);
+      });
+  };
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function loadTaskList() {
+    const client = document.getElementById("client").value;
+    const taskDropdown = document.getElementById("task");
+
+    taskDropdown.innerHTML = '<option value="">-- Select Task --</option>';
+    if (!client) return;
+
+    fetch(`${WEB_APP_URL}?action=listTasks&client=${encodeURIComponent(client)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.tasks.length > 0) {
+          data.tasks.forEach(task => {
+            const opt = document.createElement("option");
+            opt.value = task;
+            opt.textContent = task;
+            taskDropdown.appendChild(opt);
+          });
+        } else {
+          alert("No tasks found for this client.");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error loading tasks.");
+      });
+  }
+
+  function loadTask() {
+    const client = document.getElementById("client").value;
+    const task = document.getElementById("task").value;
+
+    if (!client || !task) {
+      alert("Please select both client and task.");
+      return;
+    }
+
+    fetch(`${WEB_APP_URL}?action=getTask&client=${encodeURIComponent(client)}&task=${encodeURIComponent(task)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.found) {
+          document.getElementById("category").value = data.category;
+          document.getElementById("status").value = data.status;
+          document.getElementById("priority").value = data.priority;
+          document.getElementById("due").value = data.due;
+          document.getElementById("payment").value = data.payment;
+          document.getElementById("cost").value = data.projectCost;
+          document.getElementById("paid").value = data.amountPaid;
+          document.getElementById("note").value = data.note;
+          document.getElementById("clientnote").value = data.clientNote;
+          document.getElementById("deliverables").value = data.deliverables;
+        } else {
+          alert("Task not found.");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to load task data.");
+      });
+  }
+
+  // Save changes back to Google Sheet
+  document.getElementById("updateForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = {
+      client: document.getElementById("client").value,
+      task: document.getElementById("task").value,
+      category: document.getElementById("category").value,
+      status: document.getElementById("status").value,
+      priority: document.getElementById("priority").value,
+      due: document.getElementById("due").value,
+      payment: document.getElementById("payment").value,
+      cost: document.getElementById("cost").value,
+      paid: document.getElementById("paid").value,
+      note: document.getElementById("note").value,
+      clientnote: document.getElementById("clientnote").value,
+      deliverables: document.getElementById("deliverables").value
+    };
+
+    if (!formData.client || !formData.task) {
+      alert("Client and Task are required.");
+      return;
+    }
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("✅ Task updated successfully!");
+      } else {
+        alert("❌ Failed to update task.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error saving data.");
+    });
+  });
+</script>
+
+
+
+</body>
+</html>
