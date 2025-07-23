@@ -168,6 +168,7 @@
   </div>
 
   <button type="submit">Update Task</button>
+   <button type="button" onclick="previewEmail()">👁️ Preview Email</button>
 </form>
 
 </div>
@@ -303,6 +304,147 @@
       alert("Error saving data.");
     });
   });
+
+// Map of client emails (for preview only)
+const clientEmails = {
+  "BeHappy": "behappyecosynergy@gmail.com",
+  "Happy Impact": "osmondokocha@gmail.com",
+  "Solve-It": "osmondokocha@gmail.com",
+  "Chiwinkx": "osmondokocha@gmail.com",
+  "Bota": "osmondokocha@gmail.com",
+  // Add others as needed
+};
+
+// Get client tier from dropdown or list
+function getClientTierFromList(client) {
+  // You can extend this to pull from server later
+  const premiumClients = ["BeHappy", "Happy Impact", "Solve-It", "Tikifish", "Bota", "AjoPro", "FoodHouse"];
+  const firstTimeClients = ["Propurti", "MiaMagic", "Other Client"];
+  if (premiumClients.includes(client)) return "Premium";
+  if (firstTimeClients.includes(client)) return "First Time";
+  return "Standard";
+}
+
+// Format currency
+function formatCurrency(value) {
+  return value.toLocaleString();
+}
+  
+  function previewEmail() {
+  const client = document.getElementById("client").value;
+  const task = document.getElementById("task").value;
+  const clientName = client;
+
+  if (!client || !task) {
+    alert("Please select both client and task.");
+    return;
+  }
+
+  // Collect form values
+  const category = document.getElementById("category").value;
+  const status = document.getElementById("status").value;
+  const priority = document.getElementById("priority").value;
+  const due = document.getElementById("due").value;
+  const payment = document.getElementById("payment").value;
+  const cost = parseFloat(document.getElementById("cost").value) || 0;
+  const paid = parseFloat(document.getElementById("paid").value) || 0;
+  const note = document.getElementById("note").value;
+  const clientnote = document.getElementById("clientnote").value;
+  const deliverables = document.getElementById("deliverables").value;
+
+  const isFullyPaid = paid >= cost;
+  const isPartiallyPaid = paid > 0 && !isFullyPaid;
+  const balance = cost - paid;
+
+  // Simulate task ID (you can generate or pull from sheet later)
+  const taskID = task.length > 10 ? `MK-${task.substring(0, 6).toUpperCase()}` : `MK-000001`;
+
+  // Get client profile for tier
+  const clientTier = getClientTierFromList(client); // We'll define this
+  const dashURL = "https://your-dashboard-preview.com"; // Placeholder
+  const downloadLink = "https://drive.google.com/fake-link";
+
+  // Build preview HTML
+  let subject = "";
+  let message = "";
+
+  // Use same logic as server
+  if (status === '✅ Completed') {
+    const bannerImage = `<img src="https://drive.google.com/uc?export=view&id=1CpvF1nNOlAbJlw-dugCBci9ZrVJS6pli" alt="Completed" style="width:100%; max-width:600px; border-radius:8px; margin-bottom:20px;">`;
+
+    if (isFullyPaid) {
+      subject = `🎉 ${task} – ${taskID} is Complete & Paid!`;
+      message = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          ${bannerImage}
+          <p>Hello ${clientName},</p>
+          <p>Your project titled <strong>${task} - ${taskID}</strong> has been marked as ✅ Completed by Marka Studio.</p>
+          <p>We’re happy to confirm that full payment of ₦${formatCurrency(paid)} has been received — thank you!</p>
+          <p>📥 Download your final files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
+          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+          <p>We hope you love the results! Feel free to reply with feedback.</p>
+          <p style="margin-top:20px;">With creativity and gratitude,<br><strong>Marka Studio ✨</strong></p>
+        </div>
+      `;
+    } else if (clientTier === 'Premium' && isPartiallyPaid) {
+      const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${balance}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
+      const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay Remaining (₦${formatCurrency(balance)})</a></p>`;
+      
+      subject = `✅ ${task} Delivered Early – Balance Due`;
+      message = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          ${bannerImage}
+          <p>Hello ${clientName},</p>
+          <p>Your project titled <strong>${task} - ${taskID}</strong> is now complete!</p>
+          <p>As a <strong>Premium Partner</strong>, we’ve granted early access. So far, you’ve paid ₦${formatCurrency(paid)}. The remaining balance of ₦${formatCurrency(balance)} is due upon delivery.</p>
+          <p>📥 Download your files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
+          ${payButton}
+          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+          <p>We appreciate your trust!</p>
+          <p style="margin-top:20px;">With appreciation,<br><strong>Marka Studio ✨</strong></p>
+        </div>
+      `;
+    } else if (!isFullyPaid) {
+      const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${cost}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
+      const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay to Unlock Delivery (₦${formatCurrency(balance)})</a></p>`;
+      
+      subject = `🔒 ${task} Is Ready – Pay to Unlock Files`;
+      message = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          ${bannerImage}
+          <p>Hello ${clientName},</p>
+          <p>Your project titled <strong>${task} - ${taskID}</strong> has been completed and is ready for delivery.</p>
+          <p>To unlock access, kindly settle the pending balance of ₦${formatCurrency(balance)}.</p>
+          ${payButton}
+          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+          <p>We look forward to delivering your work!</p>
+          <p style="margin-top:20px;">Warmly,<br><strong>Marka Studio ✨</strong></p>
+        </div>
+      `;
+    }
+  } else {
+    subject = `[Preview] Email for ${task} (${status})`;
+    message = `<p>Status "${status}" email logic not yet implemented in preview.</p>`;
+  }
+<button type="button" onclick="sendCompletionNow()">🚀 Send Completion Email Now</button>
+  // Open preview in new tab
+  const previewWindow = window.open('', '_blank');
+  previewWindow.document.write(`
+    <html>
+      <head><title>Email Preview</title></head>
+      <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h3>📧 Email Preview</h3>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>To:</strong> ${clientName} <${clientEmails[client] || 'client@example.com'}></p>
+        <hr>
+        ${message}
+        <hr>
+        <p><em>This is a preview. No email was sent.</em></p>
+      </body>
+    </html>
+  `);
+  previewWindow.document.close();
+}
 </script>
 
 
