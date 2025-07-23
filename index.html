@@ -83,98 +83,89 @@
     <div class="tab" onclick="switchTab('notes')">Notes</div>
   </div>
 
- <form id="updateForm">
+  <form id="updateForm">
 
-  <!-- Tab 1 -->
-  <div class="tab-content active" id="general">
+    <!-- Tab 1 -->
+    <div class="tab-content active" id="general">
+      <label for="client">Client/Brand</label>
+      <select id="client" onchange="loadTaskList()">
+        <option value="">-- Select Client --</option>
+      </select>
 
-    <label for="client">Client/Brand</label>
-    <select id="client" onchange="loadTaskList()">
-      <option value="">-- Select Client --</option>
-      <option>BeHappy</option>
-      <option>Happy Impact</option>
-      <option>Solve-IT</option>
-      <option>Tikifish Farms</option>
-      <option>Chiwinkx Farms</option>
-      <option>Bota</option>
-      <option>BigMouse Studio</option>
-      <option>Other Clients</option>
-    </select>
+      <label for="task">Task</label>
+      <select id="task">
+        <option value="">-- Select Task --</option>
+      </select>
+      <button type="button" onclick="loadTask()">🔍 Load Task</button>
 
-    <label for="task">Task</label>
-    <select id="task">
-      <option value="">-- Select Task --</option>
-    </select>
-    <button type="button" onclick="loadTask()">🔍 Load Task</button>
+      <label for="category">Category</label>
+      <select id="category">
+        <option>Design</option>
+        <option>Content Strategy</option>
+        <option>Animations</option>
+        <option>Video Editing</option>
+        <option>Branding</option>
+        <option>Design & Print</option>
+      </select>
 
-    <label for="category">Category</label>
-    <select id="category">
-      <option>Design</option>
-      <option>Content Strategy</option>
-      <option>Animations</option>
-      <option>Video Editing</option>
-      <option>Branding</option>
-      <option>Design & Print</option>
-    </select>
+      <label for="status">Status</label>
+      <select id="status">
+        <option>⏳ In Progress</option>
+        <option>✅ Completed</option>
+        <option>📤 Sent for Review</option>
+        <option>📥 Received</option>
+        <option>🔄 Waiting for Feedback</option>
+        <option>🟡 On Hold</option>
+        <option>❌ Cancelled</option>
+      </select>
 
-    <label for="status">Status</label>
-    <select id="status">
-      <option>⏳ In Progress</option>
-      <option>✅ Completed</option>
-      <option>📤 Sent for Review</option>
-      <option>📥 Received</option>
-      <option>🔄 Waiting for Feedback</option>
-      <option>🟡 On Hold</option>
-      <option>❌ Cancelled</option>
-    </select>
+      <label for="priority">Priority</label>
+      <select id="priority">
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+      </select>
 
-    <label for="priority">Priority</label>
-    <select id="priority">
-      <option>High</option>
-      <option>Medium</option>
-      <option>Low</option>
-    </select>
+      <label for="due">Due Date</label>
+      <input type="date" id="due">
+    </div>
 
-    <label for="due">Due Date</label>
-    <input type="date" id="due">
-  </div>
+    <!-- Tab 2 -->
+    <div class="tab-content" id="financial">
+      <label for="payment">Payment Status</label>
+      <select id="payment">
+        <option>Paid</option>
+        <option>Unpaid</option>
+        <option>Partially Paid</option>
+      </select>
 
-  <!-- Tab 2 -->
-  <div class="tab-content" id="financial">
-    <label for="payment">Payment Status</label>
-    <select id="payment">
-      <option>Paid</option>
-      <option>Unpaid</option>
-      <option>Partially Paid</option>
-    </select>
+      <label for="cost">Project Cost</label>
+      <input type="number" id="cost">
 
-    <label for="cost">Project Cost</label>
-    <input type="number" id="cost">
+      <label for="paid">Amount Paid</label>
+      <input type="number" id="paid">
+    </div>
 
-    <label for="paid">Amount Paid</label>
-    <input type="number" id="paid">
-  </div>
+    <!-- Tab 3 -->
+    <div class="tab-content" id="notes">
+      <label for="note">Note / Link</label>
+      <textarea id="note" rows="3" placeholder="Paste note or link here..."></textarea>
 
-  <!-- Tab 3 -->
-  <div class="tab-content" id="notes">
-    <label for="note">Note / Link</label>
-    <textarea id="note" rows="3" placeholder="Paste note or link here..."></textarea>
+      <label for="clientnote">Client Notes</label>
+      <textarea id="clientnote" rows="3" placeholder="Visible only to studio..."></textarea>
 
-    <label for="clientnote">Client Notes</label>
-    <textarea id="clientnote" rows="3" placeholder="Visible only to studio..."></textarea>
+      <label for="deliverables">Deliverables</label>
+      <textarea id="deliverables" rows="3" placeholder="e.g. 2 Teasers, 1 Explainer..."></textarea>
+    </div>
 
-    <label for="deliverables">Deliverables</label>
-    <textarea id="deliverables" rows="3" placeholder="e.g. 2 Teasers, 1 Explainer..."></textarea>
-  </div>
-
-  <button type="submit">Update Task</button>
-   <button type="button" onclick="previewEmail()">👁️ Preview Email</button>
-</form>
-
+    <button type="submit">Update Task</button>
+    <button type="button" onclick="previewEmail()">👁️ Preview Email</button>
+  </form>
 </div>
 
 <script>
-  let WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzb8-YY3qlW284uaqOG7Jat9RwqdsS-gWE1NtrE9HyXh7tnnV-skxrDX03IBTLDXDt5Rg/exec ";
+  // 🔗 Replace with your deployed Web App URL (no trailing spaces!)
+  let WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzb8-YY3qlW284uaqOG7Jat9RwqdsS-gWE1NtrE9HyXh7tnnV-skxrDX03IBTLDXDt5Rg/exec";
 
   // Load all clients on page load
   window.onload = function () {
@@ -212,7 +203,7 @@
     fetch(`${WEB_APP_URL}?action=listTasks&client=${encodeURIComponent(client)}`)
       .then(res => res.json())
       .then(data => {
-        if (data.tasks.length > 0) {
+        if (data.tasks && data.tasks.length > 0) {
           data.tasks.forEach(task => {
             const opt = document.createElement("option");
             opt.value = task;
@@ -242,24 +233,34 @@
       .then(res => res.json())
       .then(data => {
         if (data.found) {
-          document.getElementById("category").value = data.category;
-          document.getElementById("status").value = data.status;
-          document.getElementById("priority").value = data.priority;
-          document.getElementById("due").value = data.due;
-          document.getElementById("payment").value = data.payment;
-          document.getElementById("cost").value = data.projectCost;
-          document.getElementById("paid").value = data.amountPaid;
-          document.getElementById("note").value = data.note;
-          document.getElementById("clientnote").value = data.clientNote;
-          document.getElementById("deliverables").value = data.deliverables;
+          document.getElementById("category").value = data.category || '';
+          document.getElementById("status").value = data.status || '';
+          document.getElementById("priority").value = data.priority || '';
+          document.getElementById("due").value = data.due || '';
+          document.getElementById("payment").value = data.payment || '';
+          document.getElementById("cost").value = data.projectCost || '';
+          document.getElementById("paid").value = data.amountPaid || '';
+          document.getElementById("note").value = data.note || '';
+          document.getElementById("clientnote").value = data.clientNote || '';
+          document.getElementById("deliverables").value = data.deliverables || '';
         } else {
           alert("Task not found.");
+          resetForm();
         }
       })
       .catch(err => {
         console.error(err);
         alert("Failed to load task data.");
       });
+  }
+
+  // Reset all form fields
+  function resetForm() {
+    const fields = [
+      "category", "status", "priority", "due", "payment",
+      "cost", "paid", "note", "clientnote", "deliverables"
+    ];
+    fields.forEach(id => document.getElementById(id).value = '');
   }
 
   // Save changes back to Google Sheet
@@ -286,6 +287,10 @@
       return;
     }
 
+    const submitBtn = document.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+
     fetch(WEB_APP_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -296,158 +301,149 @@
       if (data.success) {
         alert("✅ Task updated successfully!");
       } else {
-        alert("❌ Failed to update task.");
+        alert("❌ Failed: " + (data.error || "Unknown error"));
       }
     })
     .catch(err => {
       console.error(err);
       alert("Error saving data.");
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Update Task";
     });
   });
 
-// Map of client emails (for preview only)
-const clientEmails = {
-  "BeHappy": "behappyecosynergy@gmail.com",
-  "Happy Impact": "osmondokocha@gmail.com",
-  "Solve-It": "osmondokocha@gmail.com",
-  "Chiwinkx": "osmondokocha@gmail.com",
-  "Bota": "osmondokocha@gmail.com",
-  // Add others as needed
-};
-
-// Get client tier from dropdown or list
-function getClientTierFromList(client) {
-  // You can extend this to pull from server later
-  const premiumClients = ["BeHappy", "Happy Impact", "Solve-It", "Tikifish", "Bota", "AjoPro", "FoodHouse"];
-  const firstTimeClients = ["Propurti", "MiaMagic", "Other Client"];
-  if (premiumClients.includes(client)) return "Premium";
-  if (firstTimeClients.includes(client)) return "First Time";
-  return "Standard";
-}
-
-// Format currency
-function formatCurrency(value) {
-  return value.toLocaleString();
-}
-  
+  // =============== EMAIL PREVIEW ===============
   function previewEmail() {
-  const client = document.getElementById("client").value;
-  const task = document.getElementById("task").value;
-  const clientName = client;
+    const client = document.getElementById("client").value;
+    const task = document.getElementById("task").value;
+    const clientName = client;
 
-  if (!client || !task) {
-    alert("Please select both client and task.");
-    return;
-  }
-
-  // Collect form values
-  const category = document.getElementById("category").value;
-  const status = document.getElementById("status").value;
-  const priority = document.getElementById("priority").value;
-  const due = document.getElementById("due").value;
-  const payment = document.getElementById("payment").value;
-  const cost = parseFloat(document.getElementById("cost").value) || 0;
-  const paid = parseFloat(document.getElementById("paid").value) || 0;
-  const note = document.getElementById("note").value;
-  const clientnote = document.getElementById("clientnote").value;
-  const deliverables = document.getElementById("deliverables").value;
-
-  const isFullyPaid = paid >= cost;
-  const isPartiallyPaid = paid > 0 && !isFullyPaid;
-  const balance = cost - paid;
-
-  // Simulate task ID (you can generate or pull from sheet later)
-  const taskID = task.length > 10 ? `MK-${task.substring(0, 6).toUpperCase()}` : `MK-000001`;
-
-  // Get client profile for tier
-  const clientTier = getClientTierFromList(client); // We'll define this
-  const dashURL = "https://your-dashboard-preview.com"; // Placeholder
-  const downloadLink = "https://drive.google.com/fake-link";
-
-  // Build preview HTML
-  let subject = "";
-  let message = "";
-
-  // Use same logic as server
-  if (status === '✅ Completed') {
-    const bannerImage = `<img src="https://drive.google.com/uc?export=view&id=1CpvF1nNOlAbJlw-dugCBci9ZrVJS6pli" alt="Completed" style="width:100%; max-width:600px; border-radius:8px; margin-bottom:20px;">`;
-
-    if (isFullyPaid) {
-      subject = `🎉 ${task} – ${taskID} is Complete & Paid!`;
-      message = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          ${bannerImage}
-          <p>Hello ${clientName},</p>
-          <p>Your project titled <strong>${task} - ${taskID}</strong> has been marked as ✅ Completed by Marka Studio.</p>
-          <p>We’re happy to confirm that full payment of ₦${formatCurrency(paid)} has been received — thank you!</p>
-          <p>📥 Download your final files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
-          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
-          <p>We hope you love the results! Feel free to reply with feedback.</p>
-          <p style="margin-top:20px;">With creativity and gratitude,<br><strong>Marka Studio ✨</strong></p>
-        </div>
-      `;
-    } else if (clientTier === 'Premium' && isPartiallyPaid) {
-      const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${balance}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
-      const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay Remaining (₦${formatCurrency(balance)})</a></p>`;
-      
-      subject = `✅ ${task} Delivered Early – Balance Due`;
-      message = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          ${bannerImage}
-          <p>Hello ${clientName},</p>
-          <p>Your project titled <strong>${task} - ${taskID}</strong> is now complete!</p>
-          <p>As a <strong>Premium Partner</strong>, we’ve granted early access. So far, you’ve paid ₦${formatCurrency(paid)}. The remaining balance of ₦${formatCurrency(balance)} is due upon delivery.</p>
-          <p>📥 Download your files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
-          ${payButton}
-          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
-          <p>We appreciate your trust!</p>
-          <p style="margin-top:20px;">With appreciation,<br><strong>Marka Studio ✨</strong></p>
-        </div>
-      `;
-    } else if (!isFullyPaid) {
-      const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${cost}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
-      const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay to Unlock Delivery (₦${formatCurrency(balance)})</a></p>`;
-      
-      subject = `🔒 ${task} Is Ready – Pay to Unlock Files`;
-      message = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          ${bannerImage}
-          <p>Hello ${clientName},</p>
-          <p>Your project titled <strong>${task} - ${taskID}</strong> has been completed and is ready for delivery.</p>
-          <p>To unlock access, kindly settle the pending balance of ₦${formatCurrency(balance)}.</p>
-          ${payButton}
-          <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
-          <p>We look forward to delivering your work!</p>
-          <p style="margin-top:20px;">Warmly,<br><strong>Marka Studio ✨</strong></p>
-        </div>
-      `;
+    if (!client || !task) {
+      alert("Please select both client and task.");
+      return;
     }
-  } else {
-    subject = `[Preview] Email for ${task} (${status})`;
-    message = `<p>Status "${status}" email logic not yet implemented in preview.</p>`;
+
+    const category = document.getElementById("category").value;
+    const status = document.getElementById("status").value;
+    const priority = document.getElementById("priority").value;
+    const due = document.getElementById("due").value;
+    const payment = document.getElementById("payment").value;
+    const cost = parseFloat(document.getElementById("cost").value) || 0;
+    const paid = parseFloat(document.getElementById("paid").value) || 0;
+    const note = document.getElementById("note").value;
+    const clientnote = document.getElementById("clientnote").value;
+    const deliverables = document.getElementById("deliverables").value;
+
+    const isFullyPaid = paid >= cost;
+    const isPartiallyPaid = paid > 0 && !isFullyPaid;
+    const balance = cost - paid;
+    const taskID = task.length > 10 ? `MK-${task.substring(0, 6).toUpperCase()}` : `MK-000001`;
+    const clientTier = getClientTierFromList(client);
+    const dashURL = "https://your-dashboard-preview.com";
+    const downloadLink = "https://drive.google.com/fake-link";
+
+    let subject = "";
+    let message = "";
+
+    if (status === '✅ Completed') {
+      const bannerImage = `<img src="https://drive.google.com/uc?export=view&id=1CpvF1nNOlAbJlw-dugCBci9ZrVJS6pli" alt="Completed" style="width:100%; max-width:600px; border-radius:8px; margin-bottom:20px;">`;
+
+      if (isFullyPaid) {
+        subject = `🎉 ${task} – ${taskID} is Complete & Paid!`;
+        message = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+            ${bannerImage}
+            <p>Hello ${clientName},</p>
+            <p>Your project titled <strong>${task} - ${taskID}</strong> has been marked as ✅ Completed by Marka Studio.</p>
+            <p>We’re happy to confirm that full payment of ₦${formatCurrency(paid)} has been received — thank you!</p>
+            <p>📥 Download your final files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
+            <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+            <p>We hope you love the results! Feel free to reply with feedback.</p>
+            <p style="margin-top:20px;">With creativity and gratitude,<br><strong>Marka Studio ✨</strong></p>
+          </div>
+        `;
+      } else if (clientTier === 'Premium' && isPartiallyPaid) {
+        const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${balance}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
+        const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay Remaining (₦${formatCurrency(balance)})</a></p>`;
+        
+        subject = `✅ ${task} Delivered Early – Balance Due`;
+        message = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+            ${bannerImage}
+            <p>Hello ${clientName},</p>
+            <p>Your project titled <strong>${task} - ${taskID}</strong> is now complete!</p>
+            <p>As a <strong>Premium Partner</strong>, we’ve granted early access. So far, you’ve paid ₦${formatCurrency(paid)}. The remaining balance of ₦${formatCurrency(balance)} is due upon delivery.</p>
+            <p>📥 Download your files: <a href="${downloadLink}" target="_blank">Download Here</a></p>
+            ${payButton}
+            <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+            <p>We appreciate your trust!</p>
+            <p style="margin-top:20px;">With appreciation,<br><strong>Marka Studio ✨</strong></p>
+          </div>
+        `;
+      } else if (!isFullyPaid) {
+        const flutterwaveUrl = `https://checkout.flutterwave.com/v3/hosted/pay?tx_ref=${taskID}&amount=${balance}&customer[name]=${encodeURIComponent(clientName)}&redirect_url=https://markastudio.com/thank-you`;
+        const payButton = `<p><a href="${flutterwaveUrl}" style="background:#E20074; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">Pay to Unlock Delivery (₦${formatCurrency(balance)})</a></p>`;
+        
+        subject = `🔒 ${task} Is Ready – Pay to Unlock Files`;
+        message = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+            ${bannerImage}
+            <p>Hello ${clientName},</p>
+            <p>Your project titled <strong>${task} - ${taskID}</strong> has been completed and is ready for delivery.</p>
+            <p>To unlock access, kindly settle the pending balance of ₦${formatCurrency(balance)}.</p>
+            ${payButton}
+            <p>🖥️ View all your projects on your <a href="${dashURL}" target="_blank">Marka Studio Dashboard</a>.</p>
+            <p>We look forward to delivering your work!</p>
+            <p style="margin-top:20px;">Warmly,<br><strong>Marka Studio ✨</strong></p>
+          </div>
+        `;
+      }
+    } else {
+      subject = `[Preview] Email for ${task} (${status})`;
+      message = `<p>Status "${status}" email logic not yet implemented in preview.</p>`;
+    }
+
+    const previewWindow = window.open('', '_blank');
+    previewWindow.document.write(`
+      <html>
+        <head><title>Email Preview</title></head>
+        <body style="font-family: Arial, sans-serif; padding: 20px;">
+          <h3>📧 Email Preview</h3>
+          <p><strong>Subject:</strong> ${subject}</p>
+          <p><strong>To:</strong> ${clientName} <${clientEmails[client] || 'client@example.com'}></p>
+          <hr>
+          ${message}
+          <hr>
+          <p><em>This is a preview. No email was sent.</em></p>
+        </body>
+      </html>
+    `);
+    previewWindow.document.close();
   }
-<button type="button" onclick="sendCompletionNow()">🚀 Send Completion Email Now</button>
-  // Open preview in new tab
-  const previewWindow = window.open('', '_blank');
-  previewWindow.document.write(`
-    <html>
-      <head><title>Email Preview</title></head>
-      <body style="font-family: Arial, sans-serif; padding: 20px;">
-        <h3>📧 Email Preview</h3>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <p><strong>To:</strong> ${clientName} <${clientEmails[client] || 'client@example.com'}></p>
-        <hr>
-        ${message}
-        <hr>
-        <p><em>This is a preview. No email was sent.</em></p>
-      </body>
-    </html>
-  `);
-  previewWindow.document.close();
-}
+
+  // Helper functions
+  function getClientTierFromList(client) {
+    const premiumClients = ["BeHappy", "Happy Impact", "Solve-It", "Tikifish", "Bota", "AjoPro", "FoodHouse"];
+    return premiumClients.includes(client) ? "Premium" : "Standard";
+  }
+
+  function formatCurrency(value) {
+    return value.toLocaleString();
+  }
+
+  const clientEmails = {
+    "BeHappy": "behappyecosynergy@gmail.com",
+    "Happy Impact": "osmondokocha@gmail.com",
+    "Solve-It": "osmondokocha@gmail.com",
+    "Chiwinkx": "osmondokocha@gmail.com",
+    "Bota": "osmondokocha@gmail.com",
+    "Tikifish": "osmondokocha@gmail.com",
+    "AjoPro": "osmondokocha@gmail.com",
+    "FoodHouse": "osmondokocha@gmail.com"
+  };
 </script>
-
-
 
 </body>
 </html>
